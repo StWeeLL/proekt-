@@ -7,7 +7,7 @@ from random import *
 window = display.set_mode((700, 500))
 display.set_caption('ping pong')
 
-background = transform.scale(image.load('трибуны.png'),(700, 500))а что не верно тут
+background = transform.scale(image.load('трибуны.jpg'),(700, 500))
 
 
 #mixer.music.play()
@@ -38,12 +38,22 @@ class Player(GameSprite):
             self.rect.x += self.speed
         if keys_pressed[K_SPACE]:
             bullet = Bullet('bullet.png',self.rect.centerx,self.rect.y,1.80,10,20) 
-            #kick.play() 
-            bullets.add(bullet)
 
 
 
-class Enemy(GameSprite):
+class Player2(GameSprite):
+    def update(self):
+       
+        keys_pressed = key.get_pressed()
+
+        if keys_pressed[K_a] and self.rect.x > 5:
+            self.rect.x -= self.speed
+        if keys_pressed[K_d] and self.rect.x < 595:
+            self.rect.x += self.speed
+        if keys_pressed[K_SPACE]:
+            bullet = Bullet('bullet.png',self.rect.centerx,self.rect.y,1.80,10,20) 
+
+class Ball(GameSprite):
     def update(self):
         self.rect.y += self.speed
         if self.rect.y > 570:
@@ -66,16 +76,12 @@ bullets.draw(window)
 bullets.update()
 
 
-sprite1 = Player('ракетка 2.png')
-sprite2 = Enemy(' ракетка 2.png')
-sprite2 = Enemy('мячик 2.png')
+sprite1 = Player('ракетка 2.png',170,120,2,65,65)
+sprite2 = Player2('ракетка 2.png',120,400,3,65,65)
+sprite3 = Ball('мячик 2.png',70,300,3,65,65)
 
 
 
-Enemys = sprite.Group()
-Enemys.add(sprite2,sprite3,sprite4,sprite5,sprite6)
-Enemys.draw(window)
-Enemys.update()
 
 
 
@@ -101,20 +107,13 @@ while game:
         sprite1.update()
         sprite1.reset()
         #if kill >= 15:
-        if sprite.spritecollide(sprite8,bullets,True):
-            boss_kill -= 1
         if boss_kill == 0:
             window.blit(win,(300,200))
             finish = True  
-        Enemys.draw(window) 
-        Enemys.update()
-        bullets.draw(window)
-        bullets.update()
-        enemy_kill = sprite.groupcollide(Enemys,bullets,True,True)
-        for enemy in enemy_kill:
-            kill += 1
-            sprite7 = Enemy('ufo.png',randint(10,690),0,1) 
-            Enemys.add(sprite7)
+        sprite2.reset()
+        sprite2.update()
+        sprite3.reset()
+        sprite3.update()
         if lost2 >= 10: 
                 kick.play()
                 window.blit(lose,(300,200))
